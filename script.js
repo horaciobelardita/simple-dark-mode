@@ -11,13 +11,21 @@ const darkTheme = {
   '--text-primary': '#EFD81C',
 };
 
-const changeTheme = (theme) => {
+const changeTheme = (name, theme) => {
   Object.keys(theme).forEach((property) =>
     styles.setProperty(property, theme[property])
   );
+  localStorage.setItem('theme', name);
 };
 
 $switchInput.addEventListener('click', (e) => {
   const { checked } = e.target.previousElementSibling;
-  checked ? changeTheme(lightTheme) : changeTheme(darkTheme);
+  checked ? changeTheme('light', lightTheme) : changeTheme('dark', darkTheme);
+});
+document.addEventListener('DOMContentLoaded', (_) => {
+  const theme = localStorage.getItem('theme') ?? 'light';
+  document.querySelector('#switch-input').checked = theme === 'dark';
+  theme === 'dark'
+    ? changeTheme('dark', darkTheme)
+    : changeTheme('light', lightTheme);
 });
